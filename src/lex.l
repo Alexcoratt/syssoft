@@ -24,6 +24,12 @@ ulong { return ULONG_T; }
 char { return CHAR_T; }
 string { return STRING_T; }
 
+if { return IF; }
+else { return ELSE; }
+while { return WHILE; }
+do { return DO; }
+break { return BREAK; }
+
 [A-Za-z_][A-Za-z0-9_]* { yylval.strv = yytext; return ID; }
 
 \"[^\"\\]*(?:\\.[^\"\\]*)*\" {
@@ -49,7 +55,7 @@ string { return STRING_T; }
     return DEC;
 }
 
-[\(\)\,\;\[\]] { return *yytext; }
+[\(\)\,\;\[\]\{\}\+\-\*\/\=] { return *yytext; }
 
 [ \t\n] /* eat up whitespace */
 
