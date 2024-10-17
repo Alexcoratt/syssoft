@@ -49,7 +49,7 @@ string { return STRING_T; }
     return DEC;
 }
 
-[\+\*\=] { return *yytext; }
+[\(\)\,\;\[\]] { return *yytext; }
 
 [ \t\n] /* eat up whitespace */
 
