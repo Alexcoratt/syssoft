@@ -29,5 +29,4 @@ mk_include_dir:
 
 # tests
 dynarray_test: mk_build_dir
-	${CC} ${CFLAGS} -include float.h -DDYN_ARRAY_VALUE_TYPE=float -DDYN_ARRAY_ERR_VALUE=FLT_MIN -c -o ${BUILD_DIR}/dynarray_float.o ${SOURCE_DIR}/dynarray.c
 	${CC} ${CFLAGS} -o ${BUILD_DIR}/dynarray_test ${SOURCE_DIR}/dynarray_test.c ${BUILD_DIR}/dynarray_float.o
