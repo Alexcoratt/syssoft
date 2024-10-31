@@ -26,11 +26,34 @@
 %token <numv> HEX BITS DEC
 %token <boolv> BOOL
 
+%left '-' '+'
+%left '*' '/'
+
+%left '[' '('
+
 %%
 
 source:
-    // empty
+    // nothing
     | source sourceItem
+;
+
+sourceItem:
+    funcSignature ';'
+    | funcSignature statementBlock
+;
+
+funcSignature: argDef '(' listArgDef ')';
+
+argDef:
+    ID
+    | typeRef ID
+;
+
+typeRef:
+    builtin_t
+    | ID
+    | typeRef '[' arrSizeDef ']'
 ;
 
 builtin_t: 
@@ -44,32 +67,14 @@ builtin_t:
     | STRING_T
 ;
 
-typeRef:
-    builtin_t
-    | ID
-    | typeRef '[' arrSizeDef ']'
-;
-
 arrSizeDef:
     // nothing
     | arrSizeDef ','
-
-funcSignature: argDef '(' listArgDef ')';
-
-argDef:
-    ID
-    | typeRef ID
-;
 
 listArgDef:
     // nothing
     | argDef
     | listArgDef ',' argDef
-;
-
-sourceItem:
-    | funcSignature ';'
-    | funcSignature statementBlock
 ;
 
 statementBlock: '{' statementBlockInner '}';
@@ -90,8 +95,7 @@ statement:
 ;
 
 listInitVar:
-    // nothing
-    | initVar
+    initVar
     | listInitVar ',' initVar
 ;
 
@@ -106,14 +110,16 @@ statementIf:
 
 expr:
     literal
+    | ID
+
+    | expr '(' listExpr ')'
+    | expr '[' listExpr ']'
+    | '(' expr ')'
+
     | expr '+' expr
     | expr '-' expr
     | expr '*' expr
     | expr '/' expr
-    | '(' expr ')'
-    | expr '(' listExpr ')'
-    | expr '[' listExpr ']'
-    | ID
 ;
 
 literal: STR | CHAR | HEX | BITS | DEC | BOOL;
