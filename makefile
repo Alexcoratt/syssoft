@@ -26,7 +26,3 @@ mk_build_dir:
 
 mk_include_dir:
 	if [ ! -d ${INCLUDE_DIR} ]; then mkdir ${INCLUDE_DIR}; fi
-
-# tests
-dynarray_test: mk_build_dir
-	${CC} ${CFLAGS} -o ${BUILD_DIR}/dynarray_test ${SOURCE_DIR}/dynarray_test.c ${BUILD_DIR}/dynarray_float.o
