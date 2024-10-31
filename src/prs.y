@@ -72,14 +72,11 @@ sourceItem:
     | funcSignature statementBlock
 ;
 
-initVar:
-    ID
-    | ID '=' expr
+statementBlock: '{' statementBlockInner '}';
 
-listInitVar:
+statementBlockInner:
     // nothing
-    | initVar
-    | listInitVar ',' initVar
+    | statementBlockInner statement
 ;
 
 statement:
@@ -92,16 +89,19 @@ statement:
     | expr ';'
 ;
 
+listInitVar:
+    // nothing
+    | initVar
+    | listInitVar ',' initVar
+;
+
+initVar:
+    ID
+    | ID '=' expr
+
 statementIf:
     IF '(' expr ')' statement
     | statementIf ELSE statement
-;
-
-statementBlock: '{' statementBlockInner '}';
-
-statementBlockInner:
-    // nothing
-    | statementBlockInner statement
 ;
 
 expr:
