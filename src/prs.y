@@ -2,6 +2,8 @@
     #include <stdio.h>
     #include <stdbool.h>
 
+    #include "custom_typename_registry.h"
+
     int yylex();
     void yyerror(const char *err) {
         fprintf(stderr, "error: %s\n", err);
@@ -11,7 +13,7 @@
 %union {
     char *strv;
     char charv;
-    unsigned long int numv;
+    long int numv;
     bool boolv;
 }
 
@@ -21,7 +23,8 @@
 /* statement tokens */
 %token IF ELSE WHILE DO BREAK
 
-%token <strv> STR ID
+%token <strv> STR VARNAME
+%token <numv> CUSTOM_TYPE
 %token <charv> CHAR
 %token <numv> HEX BITS DEC
 %token <boolv> BOOL
@@ -46,13 +49,13 @@ sourceItem:
 funcSignature: argDef '(' listArgDef ')';
 
 argDef:
-    ID
-    | typeRef ID
+    VARNAME
+    | typeRef VARNAME
 ;
 
 typeRef:
     builtin_t
-    | ID
+    | CUSTOM_TYPE
     | typeRef '[' arrSizeDef ']'
 ;
 
@@ -100,8 +103,8 @@ listInitVar:
 ;
 
 initVar:
-    ID
-    | ID '=' expr
+    VARNAME
+    | VARNAME '=' expr
 
 statementIf:
     IF '(' expr ')' statement
@@ -110,7 +113,7 @@ statementIf:
 
 expr:
     literal
-    | ID
+    | VARNAME
 
     | expr '(' listExpr ')'
     | expr '[' listExpr ']'
@@ -131,3 +134,11 @@ listExpr:
 ;
 
 %%
+
+int main(int argc, char **argv) {
+    initCustomTypeRegistry();
+    yyparse();
+    termCustomTypeRegistry();
+
+    return 0;
+}

@@ -2,8 +2,10 @@
     #include <stdlib.h>
     #include <string.h>
     #include <stdbool.h>
+    #include <limits.h>
 
     #include "prs.h"
+    #include "custom_typename_registry.h"
 
     unsigned long int parseBits(const char *);
 %}
@@ -30,7 +32,16 @@ while { return WHILE; }
 do { return DO; }
 break { return BREAK; }
 
-[A-Za-z_][A-Za-z0-9_]* { yylval.strv = yytext; return ID; }
+[A-Za-z_][A-Za-z0-9_]* {
+    type_t customType = getCustomType(yytext);
+    if (customType == UNKNOWN_TYPENAME) {
+        yylval.strv = yytext;
+        return VARNAME;
+    }
+
+    yylval.numv = customType;
+    return CUSTOM_TYPE;
+}
 
 \"[^\"\\]*(?:\\.[^\"\\]*)*\" {
     yylval.strv = yytext + 1;
