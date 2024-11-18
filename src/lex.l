@@ -5,7 +5,6 @@
     #include <limits.h>
 
     #include "prs.h"
-    #include "custom_typename_registry.h"
 
     unsigned long int parseBits(const char *);
 %}
@@ -33,14 +32,10 @@ do { return DO; }
 break { return BREAK; }
 
 [A-Za-z_][A-Za-z0-9_]* {
-    type_t customType = getCustomType(yytext);
-    if (customType == UNKNOWN_TYPENAME) {
-        yylval.strv = yytext;
-        return VARNAME;
-    }
-
-    yylval.numv = customType;
-    return CUSTOM_TYPE;
+    return VARNAME;
+    
+    // not yet
+    // return CUSTOM_TYPE;
 }
 
 \"[^\"\\]*(?:\\.[^\"\\]*)*\" {

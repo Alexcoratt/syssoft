@@ -1,14 +1,14 @@
-%{
+%code requires {
     #include <stdio.h>
     #include <stdbool.h>
 
-    #include "custom_typename_registry.h"
+    #include "syntax_tree.h"
 
     int yylex();
     void yyerror(const char *err) {
         fprintf(stderr, "error: %s\n", err);
     }
-%}
+}
 
 %union {
     char *strv;
@@ -88,7 +88,7 @@ statementBlockInner:
 ;
 
 statement:
-    typeRef listInitVar ';'
+    typeRef listInitVar ';' 
     | statementIf
     | statementBlock
     | WHILE '(' expr ')' statement
@@ -136,9 +136,7 @@ listExpr:
 %%
 
 int main(int argc, char **argv) {
-    initCustomTypeRegistry();
     yyparse();
-    termCustomTypeRegistry();
 
     return 0;
 }
