@@ -6,3 +6,6 @@ include/prs.h
 
 # compile commands
 compile_commands.json
+
+# cache
+.cache

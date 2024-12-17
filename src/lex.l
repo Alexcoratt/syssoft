@@ -1,28 +1,23 @@
 %{
-    #include <stdlib.h>
-    #include <string.h>
-    #include <stdbool.h>
+    // TODO: make rules write ast
 
+    #include "ast.h"
     #include "prs.h"
-
-    unsigned long int parseBits(const char *);
 %}
 
+DIGIT [0-9]
+LETTER [a-zA-Z_]
+NAME_SYMBOL [a-zA-Z0-9_] 
+
+SPECIAL_SYMBOL [\(\)\,\;\[\]\{\}\+\-\*\/\=]
+
+HEX 0[Xx][a-fA-F0-9]+
+BIN 0[Bb][01]+
+DEC {DIGIT}+
+
+BUILT_IN_TYPE (bool)|(byte)|(u?(int)|(long))|(char)|(string)
+
 %%
-
-true|false {
-    yylval.boolv = *yytext == 't';
-    return BOOL;
-}
-
-bool { return BOOL_T; }
-byte { return BYTE_T; }
-int { return INT_T; }
-uint { return UINT_T; }
-long { return LONG_T; }
-ulong { return ULONG_T; }
-char { return CHAR_T; }
-string { return STRING_T; }
 
 if { return IF; }
 else { return ELSE; }
@@ -30,41 +25,19 @@ while { return WHILE; }
 do { return DO; }
 break { return BREAK; }
 
-[A-Za-z_][A-Za-z0-9_]* { yylval.strv = yytext; return ID; }
+L?\"(\\.|[^\\"\n])*\" { yylval.ast = createAstToken(yytext); return STRING; }
+L?\'(\\.|[^\\'\n])+\' { yylval.ast = createAstToken(yytext); return CHAR; }
+{HEX}|{BIN}|{DEC} { yylval.ast = createAstToken(yytext); return NUM; }
+(true)|(false) { yylval.ast = createAstToken(yytext); return BOOL; }
 
-\"[^\"\\]*(?:\\.[^\"\\]*)*\" {
-    yylval.strv = yytext + 1;
-    *strchr(yylval.strv, '\"') = 0;
-    return STR;
-}
+{BUILT_IN_TYPE} { yylval.ast = createAstToken(yytext); return TYPENAME; }
+{LETTER}{NAME_SYMBOL}* { yylval.ast = createAstToken(yytext); return VARNAME; }
 
-'[^']' { yylval.charv = yytext[1]; return CHAR; }
+{SPECIAL_SYMBOL} { return *yytext; }
 
-0[Xx][A-Fa-f0-9]+ { 
-    yylval.numv = strtoul(yytext, NULL, 0);
-    return HEX;
-}
-
-0[Bb][01]+ {
-    yylval.numv = parseBits(yytext + 2);
-    return BITS;
-}
-
-[0-9]+  { 
-    yylval.numv = strtoul(yytext, NULL, 0);
-    return DEC;
-}
-
-[\(\)\,\;\[\]\{\}\+\-\*\/\=] { return *yytext; }
-
+"//"[^\n"]* /* consume comment */
 [ \t\n] /* eat up whitespace */
 
-.   { return 0; } /* unknown character */
+. { return 0; /* unknown symbol */ }
 
 %%
-
-unsigned long int parseBits(const char *str) {
-    unsigned long int res = 0;
-    for (; *str; res = (res << 1) + *str - '0', ++str);
-    return res;
-}
