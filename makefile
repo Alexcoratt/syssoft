@@ -5,7 +5,7 @@ BUILD_DIR?=build
 
 CC?=clang
 CFLAGS+=-Wall -std=gnu11 -Iinclude
-LFLAGS+=-ly -ll
+LFLAGS+=-ll
 
 # basic targets
 
