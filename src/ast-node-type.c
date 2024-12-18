@@ -5,8 +5,10 @@ const char *getAstNodeTypeString(enum AstNodeType item) {
 		case NT_ADD_EXPR: return "NT_ADD_EXPR";
 		case NT_SUB_EXPR: return "NT_SUB_EXPR";
 		case NT_MUL_EXPR: return "NT_MUL_EXPR";
+		case NT_DIV_EXPR: return "NT_DIV_EXPR";
 		case NT_CALL_EXPR: return "NT_CALL_EXPR";
 		case NT_INDEX_EXPR: return "NT_INDEX_EXPR";
+		case NT_ASSIGN_EXPR: return "NT_ASSIGN_EXPR";
 		case NT_EXPR_LIST: return "NT_EXPR_LIST";
 		case NT_INIT_VAR_LIST: return "NT_INIT_VAR_LIST";
 		case NT_ARG_DEF_LIST: return "NT_ARG_DEF_LIST";

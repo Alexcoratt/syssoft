@@ -18,6 +18,8 @@
 %token <ast> VARNAME TYPENAME CHAR STRING NUM BOOL
 %type <ast> src_item func_signature stmt_block arg_def list_arg_def stmt_block_inner type_ref non_empty_list_arg_def stmt arr_size_def list_init_var init_var if_stmt expr literal list_expr non_empty_list_expr 
 
+%right '='
+
 %left '-' '+'
 %left '*' '/'
 
@@ -105,6 +107,7 @@ expr
     | expr '(' list_expr ')' { $$ = createAstNode(NT_CALL_EXPR, 2, $1, $3); }
     | expr '[' list_expr ']' { $$ = createAstNode(NT_INDEX_EXPR, 2, $1, $3); }
     | '(' expr ')' { $$ = $2; }
+    | expr '=' expr { $$ = createAstNode(NT_ASSIGN_EXPR, 2, $1, $3); }
 
     | expr '+' expr { $$ = createAstNode(NT_ADD_EXPR, 2, $1, $3); }
     | expr '-' expr { $$ = createAstNode(NT_SUB_EXPR, 2, $1, $3); }

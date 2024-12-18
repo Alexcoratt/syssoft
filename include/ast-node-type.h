@@ -15,6 +15,7 @@ enum AstNodeType {
 
 	NT_CALL_EXPR,
 	NT_INDEX_EXPR,
+	NT_ASSIGN_EXPR,
 
 
 	// # lists
