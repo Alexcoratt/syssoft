@@ -1,22 +1,23 @@
 PROJECT_NAME=syssoft_lab1
 
 SOURCE_DIR?=src
+GRAMMAR_DIR?=grammar
 BUILD_DIR?=build
 
 CC?=clang
-CFLAGS+=-Wall -std=gnu11 -Iinclude
+CFLAGS+=-Wall -std=gnu11 -Iinclude -Ibuild
 LFLAGS+=-ll
 
 # basic targets
 
-main: lex prs
-	$(CC) $(CFLAGS) -o $(BUILD_DIR)/$(PROJECT_NAME) $(SOURCE_DIR)/main.c $(BUILD_DIR)/prs.c $(BUILD_DIR)/lex.c $(SOURCE_DIR)/ast.c $(SOURCE_DIR)/ast-node-type.c $(LFLAGS)
+main: $(BUILD_DIR)/my-lang.a
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)/$(PROJECT_NAME) main.c $^ $(LFLAGS)
 
 build:
 	mkdir -p $(BUILD_DIR)
 
 clean:
-	rm $(BUILD_DIR)/*.c $(BUILD_DIR)/*.o
+	rm $(BUILD_DIR)/*.c $(BUILD_DIR)/*.o $(BUILD_DIR)/*.h $(BUILD_DIR)/*.a
 
 # special targets
 
@@ -28,8 +29,13 @@ debug: main
 
 # text analysis
 
-lex: build
-	$(LEX) $(LEXFLAGS) -o $(BUILD_DIR)/lex.c $(SOURCE_DIR)/lex.l
+$(BUILD_DIR)/my-lang.a: $(BUILD_DIR)/my-lang.l.o $(BUILD_DIR)/my-lang.y.o $(BUILD_DIR)/ast.o $(BUILD_DIR)/ast-node-type.o
+	ar rcs $@ $^
 
-prs: build
-	$(YACC) $(YFLAGS) -o $(BUILD_DIR)/prs.c --header=include/prs.h $(SOURCE_DIR)/prs.y
+$(BUILD_DIR)/my-lang.l.o: build
+	$(LEX) $(LEXFLAGS) -o $(BUILD_DIR)/my-lang.l.c $(GRAMMAR_DIR)/my-lang.l
+	$(CC) $(CFLAGS) -c -o $@ $(BUILD_DIR)/my-lang.l.c
+
+$(BUILD_DIR)/my-lang.y.o: build
+	$(YACC) $(YFLAGS) -o $(BUILD_DIR)/my-lang.y.c --header=$(BUILD_DIR)/my-lang.y.h $(GRAMMAR_DIR)/my-lang.y
+	$(CC) $(CFLAGS) -c -o $@ $(BUILD_DIR)/my-lang.y.c
