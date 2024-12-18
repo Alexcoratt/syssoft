@@ -9,8 +9,8 @@ LFLAGS+=-ll
 
 # basic targets
 
-main: $(BUILD_DIR)/ast.o lex prs
-	$(CC) $(CFLAGS) -o $(BUILD_DIR)/$(PROJECT_NAME) $(SOURCE_DIR)/main.c $(BUILD_DIR)/prs.c $(BUILD_DIR)/lex.c $< $(LFLAGS)
+main: lex prs
+	$(CC) $(CFLAGS) -o $(BUILD_DIR)/$(PROJECT_NAME) $(SOURCE_DIR)/main.c $(BUILD_DIR)/prs.c $(BUILD_DIR)/lex.c $(SOURCE_DIR)/ast.c $(SOURCE_DIR)/ast-node-type.c $(LFLAGS)
 
 build:
 	mkdir -p $(BUILD_DIR)

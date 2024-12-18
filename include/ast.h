@@ -13,7 +13,7 @@ typedef struct AstListNode *AstStack;
 #define EMPTY_AST_STACK NULL
 
 struct AstNode {
-	enum NodeType nodeType;
+	enum AstNodeType nodeType;
 	AstStack children;
 };
 
@@ -28,7 +28,7 @@ struct Ast {
 };
 
 struct Ast createAstToken(const char *token);
-struct Ast createAstNode(enum NodeType nodeType, int childCount, ...);
+struct Ast createAstNode(enum AstNodeType nodeType, int childCount, ...);
 
 void termAst(struct Ast *);
 

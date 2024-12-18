@@ -62,8 +62,8 @@ void fprintAstToken(FILE *ofptr, const char *token, size_t indentSize) {
 void fprintAstNode(FILE *ofptr, const struct AstNode *astNodePtr, size_t indentSize) {
 	char *indentLine = createIndentLine(indentSize);
 
-	// TODO: make the function output node type as string
-	fprintf(ofptr, "%s %d\n", indentLine, astNodePtr->nodeType);
+	const char *nodeTypeString = getAstNodeTypeString(astNodePtr->nodeType);
+	fprintf(ofptr, "%s %s\n", indentLine, nodeTypeString);
 
 	size_t newIndentSize = indentSize + 1;
 

@@ -1,7 +1,7 @@
 #ifndef AST_NODE_TYPE_H
 #define AST_NODE_TYPE_H
 
-enum NodeType {
+enum AstNodeType {
 	// # expressions
 
 	// ## arithmetic expressions
@@ -49,5 +49,7 @@ enum NodeType {
 	NT_TYPE_REF,
 	NT_ARG_DEF,
 };
+
+const char *getAstNodeTypeString(enum AstNodeType);
 
 #endif
