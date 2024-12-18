@@ -29,7 +29,7 @@ debug: main
 
 # text analysis
 
-$(BUILD)/my-lang.a: $(BUILD)/my-lang.l.o $(BUILD)/my-lang.y.o $(BUILD)/ast.o $(BUILD)/ast-node-type.o
+$(BUILD)/my-lang.a: $(BUILD)/my-lang.l.o $(BUILD)/my-lang.y.o $(BUILD)/ast.o $(BUILD)/ast-output.o
 	ar rcs $@ $^
 
 $(BUILD)/my-lang.l.o: build

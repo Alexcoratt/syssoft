@@ -51,6 +51,4 @@ enum AstNodeType {
 	NT_ARG_DEF,
 };
 
-const char *getAstNodeTypeString(enum AstNodeType);
-
 #endif
