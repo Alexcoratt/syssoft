@@ -36,6 +36,7 @@ int main(int argc, char **argv) {
     return 0;
 }
 
+// TODO: add function to output .gv files
 void fprintAst(FILE *ofptr, const struct Ast *astPtr, size_t indentSize) {
 	if (astPtr->isToken) {
 		const char *token = astPtr->option.token;
@@ -46,6 +47,8 @@ void fprintAst(FILE *ofptr, const struct Ast *astPtr, size_t indentSize) {
 	}
 }
 
+// TODO: instead of creating a new indent line each time
+// use special structure
 char *createIndentLine(size_t indentSize) {
 	char *indentLine = malloc((indentSize + 3) * sizeof(char));
 	memset(indentLine, '|', indentSize);
