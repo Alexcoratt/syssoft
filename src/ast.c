@@ -28,7 +28,7 @@ char *createStrCopy(const char *str) {
 }
 
 
-struct Ast createAstNode(enum NodeType nodeType, int childCount, ...) {
+struct Ast createAstNode(enum AstNodeType nodeType, int childCount, ...) {
     va_list args;
     va_start(args, childCount);
 
